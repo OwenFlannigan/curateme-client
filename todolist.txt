@@ -1,0 +1,13 @@
+1. track search functionality
+2. add playlists
+3. more social stuff, maybe posts or something
+4. edit playlists
+5. inbox for shared stuff
+6. add server-side daily tasks
+7. fix spotify import to import all songs (check where the link goes!!!)
+8. Add search bar for events -> most might want to check out events in other places too
+    -Maybe you can just define your own searchbox? Like a normal component?
+9. Make icons change when song is playling
+10. Add random playlist image on playlist creation
+11. Don't forget add suggestion stuff
+12. Add event info to events
