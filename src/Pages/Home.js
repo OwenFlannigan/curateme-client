@@ -10,6 +10,8 @@ import TracksPresentation from '../Components/TracksPresentation';
 import FriendFeed from '../Components/FriendFeed'
 import Loader from '../Components/Loader';
 
+import _ from 'lodash';
+
 class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -36,10 +38,20 @@ class Home extends React.Component {
 
         controller.getMyRecommendedTracks()
             .then((data) => {
-                this.setState({
-                    recommendedTracks: data.tracks,
-                    loading: false
-                });
+                if (data.message) {
+                    controller.refreshMyRecommendedTracks()
+                        .then((data) => {
+                            this.setState({
+                                recommendedTracks: data,
+                                loading: false
+                            });
+                        });
+                } else {
+                    this.setState({
+                        recommendedTracks: data.tracks,
+                        loading: false
+                    });
+                }
             });
 
         controller.getFriendActivity()
@@ -143,11 +155,10 @@ class Home extends React.Component {
                         {this.state.recentActivity &&
                             <FriendFeed data={this.state.recentActivity} />}
                     </Cell>*/}
-                    <Cell col={12}>
+                    {(this.state.recentActivity && _.values(this.state.recentActivity).length > 0) && <Cell col={12}>
                         <h1>Friend Activity</h1>
-                        {this.state.recentActivity &&
-                            <ActivityBoard data={this.state.recentActivity} />}
-                    </Cell>
+                        <ActivityBoard data={this.state.recentActivity} />
+                    </Cell>}
 
 
                     <Cell col={12}>
@@ -164,7 +175,7 @@ class Home extends React.Component {
                     {/*<Grid>*/}
                     <Cell col={12}>
                         <h1>Playlists you might like{/*<IconButton name="refresh" />*/}</h1>
-                        {this.state.topPlaylists && this.state.username &&
+                        {this.state.topPlaylists &&
                             <PlaylistList
                                 playlists={this.state.topPlaylists}
                                 username={this.state.username}
