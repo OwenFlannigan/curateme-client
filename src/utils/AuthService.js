@@ -33,7 +33,7 @@ export default class AuthService extends EventEmitter {
         super()
         // Configure Auth0
         this.auth0 = new auth0.WebAuth({
-            clientID: 'h6XgQZcSGC9G3zE0nsu59cMU8wPyiHxg',
+            clientID: 'ZM0A6Syn4uYCI0euTMWrphGaw2Qe8H7l',
             domain: 'owenflannigan.auth0.com',
             responseType: 'token id_token',
             redirectUri: 'http://localhost:3001/login'
