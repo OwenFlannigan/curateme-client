@@ -51,7 +51,13 @@ const audio = new AudioController('');
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
-    replace({ pathname: 'login' });
+    replace({ pathname: '/login' });
+  }
+}
+
+const parseAuthHash = (nextState, replace) => {
+  if (/access_token|id_token|error/.test(nextState.location.hash)) {
+    auth.parseHash(nextState.location.hash)
   }
 }
 
@@ -79,7 +85,8 @@ ReactDOM.render(
 
       <Route path="events" component={Events} controller={controller} />
       <Route path="search" component={Search} controller={controller} />
-      <Route path="login" component={Login} />
+      
+      <Route path="login" component={Login} onEnter={parseAuthHash} />
       <Route path="redirect/:tokens" component={RedirectManager} />
 
       {/* Not found page */}
