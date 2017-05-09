@@ -77,7 +77,7 @@ class Playlist extends React.Component {
         controller.getUsers()
             .then((data) => {
                 var users = _.map(data, (user) => {
-                    return user.name + ' - ' + user.username;
+                    return user.username;
                 });
                 this.setState({ users: users });
             });
@@ -226,7 +226,7 @@ class Playlist extends React.Component {
         const { controller } = this.props.route;
 
         var usernames = _.map(this.state.shareWithUsers, (user) => {
-            return user.text.split(' - ')[1];
+            return user.text;
         });
 
         controller.sharePlaylistWithUsers(this.props.params.playlist_key, usernames)

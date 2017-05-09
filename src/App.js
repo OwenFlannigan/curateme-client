@@ -43,7 +43,7 @@ class App extends Component {
         // remove myself from list
         delete data[auth.getProfile().userKey];
         var users = _.map(_.compact(data), (user) => {
-          return user.name + ' - ' + user.username;
+          return user.username;
         });
         this.setState({ users: users });
       });
@@ -107,7 +107,7 @@ class App extends Component {
     const { controller } = this.props.route;
 
     var usernames = _.map(this.state.addFriendUsers, (user) => {
-      return user.text.split(' - ')[1];
+      return user.text;
     });
 
     controller.addFriend(usernames)
