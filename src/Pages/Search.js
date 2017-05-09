@@ -183,7 +183,7 @@ class ArtistPresentation extends React.Component {
 
         return (
             <Grid>
-                <Cell col={4}>
+                <Cell col={4} tablet={2} hidePhone>
                     <Grid style={{ height: '100%' }}>
                         {albums.slice(0, 2)}
                     </Grid>
@@ -204,7 +204,7 @@ class ArtistPresentation extends React.Component {
                     </Link>
                 </Cell>
 
-                <Cell col={4}>
+                <Cell col={4} tablet={2} hidePhone>
                     <Grid style={{ height: '100%' }}>
                         {albums.slice(2, 4)}
                     </Grid>

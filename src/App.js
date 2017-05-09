@@ -102,7 +102,6 @@ class App extends Component {
   }
 
   handleAddFriendSubmit() {
-    console.log('submitted with users', this.state.addFriendUsers);
     this.setState({ loading: true });
     const { controller } = this.props.route;
 
@@ -147,7 +146,6 @@ class App extends Component {
       });
 
       // concact here, when more message styles have been added. May need to _.flatten
-      console.log('shared stuff', sharedPlaylistsMessages);
       var messages = sharedPlaylistsMessages;
     }
 
@@ -202,11 +200,43 @@ class App extends Component {
           </Header>
 
           <Drawer title="Navigation" className="hide-desktop">
+            <Textfield
+              className="nav-search-field"
+              onChange={(e) => { this.handleChange(e) }}
+              label="Search..."
+              name="searchQuery"
+              placeholder="search..."
+              value={this.state.searchQuery}
+              onKeyPress={(e) => { if (e.key == 'Enter') { this.handleSearch() } }}
+              style={{ margin: '0 auto', width: '90%' }}
+            />
+            <button
+              onClick={() => { this.handleSearch() }}
+              style={{ margin: '0' }}>search</button>
+
             <Navigation>
               <IndexLink to="/" activeClassName="active">Home</IndexLink>
               <IndexLink to="/playlists" activeClassName="active">My Playlists</IndexLink>
-              <IndexLink to="/radio" activeClassName="active">Radio</IndexLink>
+              <IndexLink to="/events" activeClassName="active">Events</IndexLink>
             </Navigation>
+
+            <div className="mobile-icons">
+              {this.props.route.auth.loggedIn() && <div className="add-menu-container" style={{ verticalAlign: 'super' }}>
+                <IconButton
+                  name={_.values(messages).length ? 'mail' : 'mail_outline'}
+                  onClick={() => { this.setState({ isInboxActive: true }) }} />
+              </div>}
+
+              {this.props.route.auth.loggedIn() && <div className="add-menu-container" style={{ verticalAlign: 'super' }}>
+                <IconButton name="add" id="add-menu-mobile" />
+                <Menu target="add-menu-mobile" align="right">
+                  {/*<MenuItem>Post an Update</MenuItem>*/}
+                  <MenuItem><Link to="/playlists/add">Create a Playlist</Link></MenuItem>
+                  <MenuItem onClick={() => { this.setState({ isAddFriendDialogActive: true }) }}><Link>Add a Friend</Link></MenuItem>
+                </Menu>
+              </div>}
+            </div>
+
           </Drawer>
 
           <div style={{ marginBottom: childBottomMargin }}>

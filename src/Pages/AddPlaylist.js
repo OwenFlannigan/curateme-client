@@ -28,7 +28,7 @@ class AddPlaylist extends React.Component {
         const { controller } = this.props.route;
 
         var query = this.state.best_used_for ? this.state.best_used_for : '';
-        console.log('query', this.state);
+        // console.log('query', this.state);
 
         controller.searchPlaylists(query, _.map(moods, 'text'))
             .then((data) => {
@@ -40,7 +40,7 @@ class AddPlaylist extends React.Component {
                     var tracks = _.shuffle(tracks).slice(0, 5);
 
                     
-                    console.log('tracks here', _.values(tracks[0]));
+                    // console.log('tracks here', _.values(tracks[0]));
                     this.loadSuggestedTracks(_.values(tracks[0]));
                 } else {
                     this.setState({ message: "No suggestions yet, keep adding moods!", loading: false });
@@ -56,13 +56,13 @@ class AddPlaylist extends React.Component {
                 if (this.state.savedTracks) {
                     data = _.concat(_.values(this.state.savedTracks), data);
                 }
-                console.log('tracks', data);
+                // console.log('tracks', data);
                 this.setState({ suggestedTracks: data, loading: false });
             });
     }
 
     loadVideo(track) {
-        console.log('loading track', track);
+        // console.log('loading track', track);
         const { audio } = this.props;
         const { controller } = this.props.route;
 
@@ -121,7 +121,7 @@ class AddPlaylist extends React.Component {
                             <p className="add-playlist-message">{this.state.message}</p>
                         </Cell>}
 
-                    <Cell col={6} phone={12}>
+                    <Cell col={6} tablet={12} phone={12}>
                         {this.state.suggestedPlaylists &&
                             <div>
                                 <h1>playlists to try</h1>
@@ -131,7 +131,7 @@ class AddPlaylist extends React.Component {
                             </div>}
                     </Cell>
 
-                    <Cell col={6} phone={12}>
+                    <Cell col={6} tablet={12} phone={12}>
                         {(this.state.suggestedTracks && this.state.suggestedTracks.length) &&
                             <div>
                                 <h1>suggested tracks</h1>
@@ -205,7 +205,7 @@ class PlaylistCreationForm extends React.Component {
 
         return (
             <Grid>
-                <Cell col={3}>
+                <Cell col={3} tablet={12} phone={12}>
                     <Card className="add-playlist-image" shadow={0} style={{ width: '100%', height: '100%', background: 'url(' + this.state.image + ') center / cover', margin: 'auto' }}>
                         <CardTitle expand />
                         <CardActions style={{ height: '52px', padding: '16px', background: 'rgba(0,0,0,0.2)' }}>
@@ -220,7 +220,7 @@ class PlaylistCreationForm extends React.Component {
                     {/*<img className="responsive-img" src={this.state.image} alt="playlist image" />*/}
                 </Cell>
 
-                <Cell col={9}>
+                <Cell col={9} tablet={12} phone={12}>
                     <FormGroup className="add-playlist-form">
                         <FormControl
                             name="name"

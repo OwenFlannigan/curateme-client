@@ -105,6 +105,14 @@ header nav {
   text-transform: lowercase;
 }
 
+.mobile-icons {
+  text-align: center;
+}
+
+.mobile-icons * {
+  display: inline-block;
+}
+
 .profile-button {
   float: right;
   position: absolute;
