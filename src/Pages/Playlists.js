@@ -35,7 +35,7 @@ class Playlists extends React.Component {
 
     loadPlaylists() {
         const { controller } = this.props.route;
-        
+
         controller.getMyPlaylists()
             .then((data) => {
                 this.setState({ playlists: data, loading: false });
@@ -67,7 +67,10 @@ class Playlists extends React.Component {
                     onClose={() => { this.setState({ isDialogActive: false }) }}
                     users={this.state.users} />}
 
-                <h1>My Playlists <span className="sub-header"><a href="http://localhost:3000/api/spotify">import</a></span></h1>
+                <h1 style={{ paddingLeft: '0' }}>My Playlists <span className="sub-header"><a href="http://localhost:3000/api/spotify">import</a></span></h1>
+
+                {this.state.playlists && _.values(this.state.playlists).length == 0 &&
+                    <p>Add some playlists, or use the import bottom above to import your playlists from Spotify!</p>}
 
                 {this.state.playlists &&
                     <PlaylistList
@@ -75,6 +78,7 @@ class Playlists extends React.Component {
                         playlists={this.state.playlists}
                         username={this.state.username}
                         onFavorite={(key) => { this.handleFavorite(key) }} />}
+
 
                 <Snackbar
                     active={this.state.isSnackbarActive}

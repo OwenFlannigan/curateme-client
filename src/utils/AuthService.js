@@ -2,27 +2,32 @@ import Auth0Lock from 'auth0-lock';
 import { EventEmitter } from 'events';
 import { isTokenExpired } from './jwtHelper';
 import { browserHistory } from 'react-router';
+import _ from 'lodash';
 
 export default class AuthService extends EventEmitter {
     constructor(clientId, domain) {
         super();
+
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'http://localhost:3001/login',
+                redirectUrl: 'https://curateme.io/login',
                 responseType: 'token'
             },
-
-            additionalSignUpFields: [{
-                username: 'Username (must be unique)',
-                placeholder: 'your name (at least 3 characters)',
-                validator: function (value) {
-                    return value.length > 3;
-                }
-            }]
+            theme: {
+                logo: require('../../public/favicon.ico'),
+                primaryColor: '#ff6363'
+            },
+            languageDictionary: {
+                title: 'curate.me',
+                signUpTerms: 'I am at least 13 years of age.'
+            },
+            usernameStyle: 'username',
+            mustAcceptTerms: true
         });
 
         // callback for lock authenticated event
         this.lock.on('authenticated', this._doAuthentication.bind(this));
+
         // binds ligin function to keep context
         this.login = this.login.bind(this);
     }
@@ -68,7 +73,7 @@ export default class AuthService extends EventEmitter {
                 profile.userKey = data.key;
                 console.log('key in auth', data.key);
                 console.log('profile in auth', profile);
-        
+
                 localStorage.setItem('profile', JSON.stringify(profile));
                 this.emit('profile_updated', profile);
             });

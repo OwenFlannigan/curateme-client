@@ -8,10 +8,8 @@ class Login extends React.Component {
 
         return (
             <div className="myContainer">
-                <h2>Login</h2>
-                <ButtonToolbar>
-                    <Button bsStyle="primary" onClick={auth.login.bind(this)}>Login</Button>
-                </ButtonToolbar>
+                <h1 style={{ paddingLeft: '0' }}>Click below to Login</h1>
+                <button onClick={auth.login.bind(this)}>Login</button>
             </div>
         );
     }

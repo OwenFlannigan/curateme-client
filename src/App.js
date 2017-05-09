@@ -153,7 +153,7 @@ class App extends Component {
 
 
     // var profile = <img className="profile-button" src={'https://www.gravatar.com/avatar/' + md5('oflann@uw.edu')} />;
-    var title = <h1>curate<span>.</span>me</h1>;
+    var title = <h1 style={{ paddingLeft: '0' }}>curate<span>.</span>me</h1>;
     return (
       <div className="App">
         <Layout fixedHeader>
