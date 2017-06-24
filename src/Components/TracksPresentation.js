@@ -50,7 +50,7 @@ class TracksPresentationScroll extends React.Component {
                         src={track.album.images[0].url}
                         className="responsive-img"
                         alt={track.id}
-                        onClick={() => { this.props.onPlayTrack(track, index) }} />
+                        onClick={() => { this.props.onPlayTrack(track) }} />
 
                     <div className="track-pres-item-details">
                         <h2>{track.name}</h2>

@@ -117,7 +117,7 @@ class Home extends React.Component {
             });
     }
 
-    loadVideo(track, index) {
+    loadVideo(track) {
         console.log('loading track', track);
         const { audio } = this.props;
         const { controller } = this.props.route;
@@ -127,21 +127,18 @@ class Home extends React.Component {
 
         controller.videoSearch(query)
             .then((data) => {
-                console.log('setting audio playlist', index);
-                if(index) {
-                    data.playlist = _.slice(this.state.recommendedTracks, index + 1, this.state.recommendedTracks.length);
-                }
+                console.log('video search', query, data);
                 audio.setData(data);
                 this.setState({ loading: false });
             });
 
-        let v = new Vibrant(track.album.images[0].url);
-        v.getPalette().then((palette) => {
-            var rgb = palette.Vibrant.getRgb();
-            var color = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
-            console.log('color', color);
-            this.setState({ bgColor: color });
-        });
+        // let v = new Vibrant(track.album.images[0].url);
+        // v.getPalette().then((palette) => {
+        //     var rgb = palette.Vibrant.getRgb();
+        //     var color = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
+        //     console.log('color', color);
+        //     this.setState({ bgColor: color });
+        // });
     }
 
     toggleCardWidth() {
@@ -178,7 +175,7 @@ class Home extends React.Component {
                             {this.state.recommendedTracks &&
                                 <TracksPresentationScroll
                                     tracks={this.state.recommendedTracks}
-                                    onPlayTrack={(track, index) => { this.loadVideo(track, index) }} />}
+                                    onPlayTrack={(track) => { this.loadVideo(track) }} />}
 
                         </ScrollableContent>
                     </Cell>

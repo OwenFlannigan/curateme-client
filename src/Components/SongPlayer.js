@@ -12,6 +12,16 @@ class SongPlayer extends React.Component {
         this.state = { trackId: this.props.data.id };
         console.log('player data', this.props.data);
     }
+    
+    componentDidMount() {
+        this.setState({ trackId: this.props.data.id });        
+    }
+
+    componentWillUpdate(nextProps) {
+        if(this.props.data.id != nextProps.data.id) {
+            this.setState({ trackId: nextProps.data.id });
+        }
+    }
 
     togglePlayer() {
         if (this.state.bottom == '-7rem') {
@@ -24,12 +34,8 @@ class SongPlayer extends React.Component {
 
     }
 
-    playNextTrack() {
-
-        this.props.onTrackEnd();
-    }
-
     render() {
+        console.log('sp props', this.props);
         const options = {
             playerVars: { // https://developers.google.com/youtube/player_parameters 
                 autoplay: 1,
@@ -57,7 +63,6 @@ class SongPlayer extends React.Component {
                         <YouTube
                             videoId={this.state.trackId}
                             className="responsive-video player-video"
-                            onEnd={() => { this.playNextTrack() }}
                             opts={options} />
 
                     </Cell>
