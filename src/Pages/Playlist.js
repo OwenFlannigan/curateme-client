@@ -51,7 +51,7 @@ class Playlist extends React.Component {
                     browserHistory.replace('/playlist_not_found');
                 } else {
                     // data.tracks = _.sortBy(data, ['added_at']);
-                    console.log(data);
+                    console.log('getting playlist data here', data);
 
                     this.getRecommendedPlaylists(data);
                     this.setState({
@@ -283,7 +283,7 @@ class Playlist extends React.Component {
                 <EditPlaylistDialog
                     playlist={this.state.playlist}
                     active={this.state.isEditDialogActive}
-                    onMoodEnter={(moods) => { this.setState({ mood: _.map(moods, 'text') }) }}
+                    onMoodEnter={(moods) => { this.setState({ mood: _.map(moods, 'text') }, console.log(this.state)) }}
                     onClose={() => { this.setState({ isEditDialogActive: false }) }}
                     onChange={(e) => { this.handleChange(e) }}
                     onSubmit={() => { this.handleSubmit() }} />

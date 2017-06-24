@@ -5,6 +5,7 @@ body {
   padding: 0;
   font-family: 'Roboto', 'sans-serif';
   font-weight: 300;
+  box-sizing: border-box;
 }
 
 a {
@@ -127,6 +128,109 @@ header nav {
 
 .profile-button:hover {
   border: 2px solid #ff6363;  
+}
+
+.scrollable-content-container {
+  width: 100%;
+  position: relative;
+  height: 362px;
+  overflow: hidden;
+}
+
+.scrollable-content {
+  white-space: nowrap;
+  /*overflow: scroll;*/
+  position: relative;
+  height: 100%;
+  transition: 1s;
+}
+
+.chevron-container-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100px;  
+  z-index: 200;
+  background: linear-gradient(left, rgba(0,0,0,1), rgba(0,0,0,0));
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.chevron-container-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 100px;  
+  z-index: 200;
+  /*background: linear-gradient(right, rgba(0,0,0,1), rgba(0,0,0,0));*/
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.chevron-left {
+  background-image: url('../images/ic_chevron_left.svg');
+}
+
+.chevron-right {
+  background-image: url('../images/ic_chevron_right.svg');
+}
+
+.refresh {
+  background-image: url('../images/ic_autorenew.svg');
+}
+
+.chevron-right, .chevron-left {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 7rem;
+  position: absolute;
+  transform: translateY(-50%);
+  transition: background-size 100ms;
+  height: 7rem;
+  top: 50%;
+  width: 100%;
+}
+
+.scrollable-content > * {
+  display: inline-block;
+}
+
+.track-pres-scroll-container {
+  background: #1d1d1d;
+  color: white;
+  padding: 0 1rem 0 1rem;
+  transition: background 1s;
+}
+
+.track-pres-scroll {
+  /*white-space: nowrap;*/
+  /*overflow: scroll;*/
+  /*padding-left: 1rem;*/
+  position: relative;
+}
+
+.track-pres-item {
+  cursor: pointer;
+  display: inline-block;
+  width: 200px;
+  padding: 2rem 1rem;
+  overflow: hidden;
+}
+
+.track-pres-item h2 {
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.track-pres-item p {
+  font-weight: 300;
+  margin-bottom: 0;
 }
 
 .artist-pres-card {
@@ -700,5 +804,34 @@ input.ReactTags__tagInputField::-webkit-input-placeholder {
 
   .nav-search-container {
     display: none;
+  }
+
+  .track-pres-item {
+    padding: 1rem 0.5rem 0 0.5rem;
+  }
+
+  .track-pres-scroll-container {
+    padding: 0 0.5rem 0 0.5rem;
+  }
+
+  .track-pres-item-details h2 {
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+
+  .track-pres-item-details p {
+    display: none;
+  }
+
+  .chevron-container-left, .chevron-container-right {
+    width: 2rem;
+  }
+
+  .chevron-right, .chevron-left {
+    background-size: 4rem !important;
+  }
+
+  .refresh {
+    background-size: 2.5rem !important;
   }
 }

@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import { IconButton, Checkbox } from 'react-mdl';
 import { FormControl } from 'react-bootstrap';
 
-import MoodTagInput from './TagInput';
+import { MoodTagInput } from './TagInput';
 import MessageList from './MessageList';
 import IconTextfield from './IconTextfield';
 

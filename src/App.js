@@ -27,7 +27,33 @@ class App extends Component {
 
 
     audioController.emitter.addListener('updated', (data) => {
-      this.setState({ playerData: data, isPlayerActive: true });
+      // load playlist from youtube
+      console.log('data received in app', data);
+      if (data.playlist) {
+        console.log('1');
+        var videoIds = [];
+
+        var index = 0;
+        _.forEach(data.playlist, (track, key) => {
+          var query = track.name + ' ' + track.artists[0].name;
+
+          controller.videoSearch(query)
+            .then((data) => {
+              videoIds.push(data.id);
+            });
+
+          if (index == data.playlist.length - 1) {
+            console.log('vid playlist', videoIds);
+            this.setState({ playerData: data, isPlayerActive: true, videoPlaylist: videoIds });
+          }
+          index++;
+        });
+      } else {
+        console.log('2');
+        
+        this.setState({ playerData: data, isPlayerActive: true });
+
+      }
     });
 
     if (auth.loggedIn()) {
@@ -119,6 +145,21 @@ class App extends Component {
           snackBarText: data.message
         });
       });
+  }
+
+  playNextTrack() {
+    // console.log('prooopd', this.props);
+    // const { audioController, controller } = this.props.route;
+
+    // var nextTrack = audioController.getNextTrack();
+    // var query = nextTrack.name + ' ' + nextTrack.artists[0].name
+
+    // controller.videoSearch(query)
+    //   .then((data) => {
+    //     data.playlist = audioController.getPlaylist();
+    //     audioController.setData(data);
+    //     this.setState({ loading: false });
+    //   });
   }
 
   render() {
@@ -245,7 +286,9 @@ class App extends Component {
 
           {this.state.playerData && <SongPlayer
             data={this.state.playerData}
-            updateParent={(state) => { this.setState(state) }} />}
+            playlist={this.state.videoPlaylist}
+            updateParent={(state) => { this.setState(state) }}
+            onTrackEnd={() => { this.playNextTrack() }} />}
 
 
         </Layout>

@@ -6,11 +6,14 @@ import { Grid, Cell, IconButton } from 'react-mdl';
 import SongList from '../Components/SongList';
 import PlaylistList from '../Components/PlaylistList';
 import ActivityBoard from '../Components/ActivityBoard';
-import TracksPresentation from '../Components/TracksPresentation';
+import TracksPresentation, { TracksPresentationScroll } from '../Components/TracksPresentation';
 import FriendFeed from '../Components/FriendFeed'
 import Loader from '../Components/Loader';
+import ScrollableContent from '../Components/ScrollableContent';
 
 import _ from 'lodash';
+import Vibrant from 'node-vibrant';
+
 
 class Home extends React.Component {
     constructor(props) {
@@ -18,7 +21,8 @@ class Home extends React.Component {
         this.state = {
             profile: props.auth.getProfile(),
             cardWidth: '50%',
-            loading: true
+            loading: true,
+            bgColor: '#1d1d1d'
         }
 
         props.auth.on('profile_updated', (newProfile) => {
@@ -106,13 +110,14 @@ class Home extends React.Component {
         controller.refreshMyRecommendedTracks()
             .then((data) => {
                 this.setState({
-                    recommendedTracks: data,
-                    loading: false
+                    recommendedTracks: _.concat(this.state.recommendedTracks, data),
+                    loading: false,
+                    panel: 0
                 });
             });
     }
 
-    loadVideo(track) {
+    loadVideo(track, index) {
         console.log('loading track', track);
         const { audio } = this.props;
         const { controller } = this.props.route;
@@ -122,9 +127,21 @@ class Home extends React.Component {
 
         controller.videoSearch(query)
             .then((data) => {
+                console.log('setting audio playlist', index);
+                if(index) {
+                    data.playlist = _.slice(this.state.recommendedTracks, index + 1, this.state.recommendedTracks.length);
+                }
                 audio.setData(data);
                 this.setState({ loading: false });
             });
+
+        let v = new Vibrant(track.album.images[0].url);
+        v.getPalette().then((palette) => {
+            var rgb = palette.Vibrant.getRgb();
+            var color = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
+            console.log('color', color);
+            this.setState({ bgColor: color });
+        });
     }
 
     toggleCardWidth() {
@@ -147,33 +164,44 @@ class Home extends React.Component {
     render() {
 
         return (
-            <div className="myContainer">
+            <div>
                 <Loader active={this.state.loading} />
 
-                <Grid className="home-content">
+                <Grid className="home-content" noSpacing>
+
+                    <Cell col={12} className="track-pres-scroll-container"
+                        style={{ backgroundColor: this.state.bgColor }}>
+                        {/*<h1>Recommendations<IconButton name="refresh" onClick={() => this.refreshRecommendations()} /></h1>*/}
+                        <ScrollableContent
+                            onLoadMore={() => { this.refreshRecommendations() }}>
+
+                            {this.state.recommendedTracks &&
+                                <TracksPresentationScroll
+                                    tracks={this.state.recommendedTracks}
+                                    onPlayTrack={(track, index) => { this.loadVideo(track, index) }} />}
+
+                        </ScrollableContent>
+                    </Cell>
+
+
                     {/*<Cell col={12}>
                         {this.state.recentActivity &&
                             <FriendFeed data={this.state.recentActivity} />}
                     </Cell>*/}
-                    {(this.state.recentActivity && _.values(this.state.recentActivity).length > 0) && <Cell col={12}>
-                        <h1>Friend Activity</h1>
-                        <ActivityBoard data={this.state.recentActivity} />
-                    </Cell>}
+                    {
+                        (this.state.recentActivity && _.values(this.state.recentActivity).length > 0) &&
+                        <Cell col={12} className="myContainer">
+                            <h1>Friend Activity</h1>
+                            <ActivityBoard data={this.state.recentActivity} />
+                        </Cell>
+                    }
 
 
-                    <Cell col={12}>
-                        <h1>Recommendations<IconButton name="refresh" onClick={() => this.refreshRecommendations()} /></h1>
-                        {this.state.recommendedTracks &&
-                            <div style={{ padding: '8px' }}>
-                                <TracksPresentation
-                                    tracks={this.state.recommendedTracks}
-                                    onPlayTrack={(track) => { this.loadVideo(track) }} />
-                            </div>}
-                    </Cell>
+
 
                     {/*</Grid>*/}
                     {/*<Grid>*/}
-                    <Cell col={12}>
+                    <Cell col={12} className="myContainer">
                         <h1>Playlists you might like{/*<IconButton name="refresh" />*/}</h1>
                         {this.state.topPlaylists &&
                             <PlaylistList
@@ -182,8 +210,8 @@ class Home extends React.Component {
                                 onFavorite={(key) => { this.handleFavorite(key) }} />}
 
                     </Cell>
-                </Grid>
-            </div>
+                </Grid >
+            </div >
         );
     }
 }

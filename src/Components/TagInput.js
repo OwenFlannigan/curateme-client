@@ -70,6 +70,7 @@ class MoodTagInput extends React.Component {
         return(
             <TagInput
                 onNewTag={this.props.onNewTag}
+                tags={this.props.tags}
                 placeholder="moods (this playlist makes me feel...)"
                 suggestions={moods} />
         );

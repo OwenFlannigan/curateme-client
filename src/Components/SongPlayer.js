@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 
 import { Grid, Cell, IconButton, ProgressBar } from 'react-mdl';
 import YouTube from 'react-youtube';
+import _ from 'lodash';
 
 class SongPlayer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = { trackId: this.props.data.id };
+        console.log('player data', this.props.data);
     }
 
     togglePlayer() {
@@ -22,12 +24,20 @@ class SongPlayer extends React.Component {
 
     }
 
+    playNextTrack() {
+
+        this.props.onTrackEnd();
+    }
+
     render() {
         const options = {
             playerVars: { // https://developers.google.com/youtube/player_parameters 
-                autoplay: 1
+                autoplay: 1,
+                playlist: this.props.playlist ? this.props.playlist.join(',') : ''
             }
         };
+
+        console.log('video opts', options);
 
         var iconName = 'keyboard_arrow_down';
         if (this.state.bottom == '-7rem') {
@@ -45,9 +55,9 @@ class SongPlayer extends React.Component {
                 <Grid noSpacing>
                     <Cell col={2} tablet={2} phone={1}>
                         <YouTube
-                            videoId={this.props.data.id}
+                            videoId={this.state.trackId}
                             className="responsive-video player-video"
-                            onEnd={() => { this.togglePlayer() }}
+                            onEnd={() => { this.playNextTrack() }}
                             opts={options} />
 
                     </Cell>

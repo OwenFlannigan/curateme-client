@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { EventEmitter } from 'fbemitter';
 var emitter = new EventEmitter();
 
@@ -21,7 +22,18 @@ export default class AudioController extends EventEmitter {
         this.src = data.src;
         this.name = data.name;
         this.id = data.id;
+        this.playlist = data.playlist;
         this.emitter.emit('updated', data);
+    }
+
+    getPlaylist() {
+        return this.playlist;
+    }
+
+    getNextTrack() {
+        delete this.playlist[0];
+        this.playlist = _.compact(this.playlist);
+        return this.playlist[0];
     }
 
     getSource() {

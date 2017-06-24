@@ -12,6 +12,7 @@
     "js-md5": "^0.4.2",
     "jwt-decode": "^2.2.0",
     "moment": "^2.18.1",
+    "node-vibrant": "^3.0.0-alpha.2",
     "promise-polyfill": "^6.0.2",
     "query-string": "^4.3.2",
     "react": "^15.4.2",
