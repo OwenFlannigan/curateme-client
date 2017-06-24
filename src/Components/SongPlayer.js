@@ -12,13 +12,13 @@ class SongPlayer extends React.Component {
         this.state = { trackId: this.props.data.id };
         console.log('player data', this.props.data);
     }
-    
+
     componentDidMount() {
-        this.setState({ trackId: this.props.data.id });        
+        this.setState({ trackId: this.props.data.id });
     }
 
     componentWillUpdate(nextProps) {
-        if(this.props.data.id != nextProps.data.id) {
+        if (this.props.data.id != nextProps.data.id) {
             this.setState({ trackId: nextProps.data.id });
         }
     }
@@ -63,7 +63,8 @@ class SongPlayer extends React.Component {
                         <YouTube
                             videoId={this.state.trackId}
                             className="responsive-video player-video"
-                            opts={options} />
+                            opts={options}
+                            onEnd={() => { this.props.onEnd() }} />
 
                     </Cell>
 

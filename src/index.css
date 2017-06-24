@@ -626,6 +626,7 @@ ul.message-list {
 .activity-board-card {
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
+  background: white;
 }
 
 .activity-board-card h2 {
@@ -786,6 +787,14 @@ input.ReactTags__tagInputField::-webkit-input-placeholder {
 
 /* Mobile Specific */
 @media screen and (max-width: 768px) {
+  .myContainer:nth-child(2) {
+    background: white;
+  }
+  
+  .myContainer:nth-child(3) {
+    background: #f4f4f4;
+  }
+
   .mdl-layout__header-row {
     padding: 40px 40px 40px 80px;
   }
@@ -804,6 +813,18 @@ input.ReactTags__tagInputField::-webkit-input-placeholder {
 
   .nav-search-container {
     display: none;
+  }
+
+  .mobile-track-recommendations {
+    /*width: 90% !important;*/
+    margin: auto;
+  }
+
+  .mobile-track-recommendations h1 {
+    font-weight: 100;
+    font-size: 2rem !important;
+    margin: 0 0 0 1rem;
+    color: #2d2d2d;
   }
 
   .track-pres-item {

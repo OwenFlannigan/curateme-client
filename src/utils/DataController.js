@@ -284,6 +284,13 @@ export default class DataController {
             });
     }
 
+    videoPlaylistSearch(query) {
+        return fetch('/api/youtube/search/multiple?q=' + query)
+            .then((response) => {
+                return response.json();
+            });
+    }
+
     // events
     getEventsNearMe(position) {
         return fetch('/api/eventful/events?location=' + position.coords.latitude + ',' + position.coords.longitude)

@@ -12,6 +12,7 @@ import AuthService from './utils/AuthService';
 // DataController
 import DataController, { SpotifyController } from './utils/DataController';
 import AudioController from './utils/AudioController';
+import AudioPlaylist from './utils/AudioPlaylist';
 
 // Pages
 import Login from './Pages/Login';
@@ -48,6 +49,7 @@ const controller = new DataController(auth);
 const spotify = new SpotifyController(auth);
 
 const audio = new AudioController('');
+const playlist = new AudioPlaylist('', controller);
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -57,7 +59,7 @@ const requireAuth = (nextState, replace) => {
 
 ReactDOM.render(
   <Router history={browserHistory}>
-    <Route path="/" component={App} auth={auth} controller={controller} audioController={audio}>
+    <Route path="/" component={App} auth={auth} controller={controller} audioController={audio} audioPlaylist={playlist}>
       <IndexRedirect to="/home" />
       <Route path="home" component={Home} onEnter={requireAuth} controller={controller} />
 

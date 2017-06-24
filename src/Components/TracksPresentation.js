@@ -41,6 +41,8 @@ class TracksPresentationScroll extends React.Component {
                 tooltopPosition = 'bottom';
             }
 
+            var hasNext = index < this.props.tracks.length - 1;
+
             return (
                 <div
                     key={track.id + '-album-pres-cover'}
@@ -50,7 +52,7 @@ class TracksPresentationScroll extends React.Component {
                         src={track.album.images[0].url}
                         className="responsive-img"
                         alt={track.id}
-                        onClick={() => { this.props.onPlayTrack(track) }} />
+                        onClick={() => { this.props.onPlayTrack(track, hasNext) }} />
 
                     <div className="track-pres-item-details">
                         <h2>{track.name}</h2>

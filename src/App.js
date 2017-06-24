@@ -68,6 +68,16 @@ class App extends Component {
       });
   }
 
+  playNextTrack() {
+    const { audioController, audioPlaylist } = this.props.route;
+    // const { audio } = this.props;
+
+    var data = audioPlaylist.getNextTrack();
+    console.log('app data', data, this.props);
+    audioController.setData(data);
+    
+  }
+
   handleChange(event) {
     var fields = {};
     fields[event.target.name] = event.target.value;
@@ -126,7 +136,8 @@ class App extends Component {
     if (this.props.children) {
       children = React.cloneElement(this.props.children, {
         auth: this.props.route.auth, //sends auth instance from route to children
-        audio: this.props.route.audioController
+        audio: this.props.route.audioController,
+        audioPlaylist: this.props.route.audioPlaylist
       });
     }
 
@@ -246,7 +257,8 @@ class App extends Component {
           {this.state.playerData && <SongPlayer
             data={this.state.playerData}
             playlist={this.state.videoPlaylist}
-            updateParent={(state) => { this.setState(state) }} />}
+            updateParent={(state) => { this.setState(state) }}
+            onEnd={() => { this.playNextTrack() }} />}
 
 
         </Layout>

@@ -117,9 +117,9 @@ class Home extends React.Component {
             });
     }
 
-    loadVideo(track) {
+    loadVideo(track, hasNext) {
         console.log('loading track', track);
-        const { audio } = this.props;
+        const { audio, audioPlaylist } = this.props;
         const { controller } = this.props.route;
 
         this.setState({ loading: true });
@@ -128,17 +128,25 @@ class Home extends React.Component {
         controller.videoSearch(query)
             .then((data) => {
                 console.log('video search', query, data);
+
+                // if(hasNext) {
+                var currentTrackIndex = _.findIndex(this.state.recommendedTracks, (recommendedTrack) => {
+                    return recommendedTrack.id == track.id;
+                });
+                audioPlaylist.setPlaylist(this.state.recommendedTracks.slice(currentTrackIndex + 1, this.state.recommendedTracks.length));
+                // }
+
                 audio.setData(data);
                 this.setState({ loading: false });
             });
 
-        // let v = new Vibrant(track.album.images[0].url);
-        // v.getPalette().then((palette) => {
-        //     var rgb = palette.Vibrant.getRgb();
-        //     var color = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
-        //     console.log('color', color);
-        //     this.setState({ bgColor: color });
-        // });
+        let v = new Vibrant(track.album.images[0].url);
+        v.getPalette().then((palette) => {
+            var rgb = palette.Vibrant.getRgb();
+            var color = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
+            console.log('color', color);
+            this.setState({ bgColor: color });
+        });
     }
 
     toggleCardWidth() {
@@ -166,7 +174,7 @@ class Home extends React.Component {
 
                 <Grid className="home-content" noSpacing>
 
-                    <Cell col={12} className="track-pres-scroll-container"
+                    <Cell col={12} hidePhone className="track-pres-scroll-container"
                         style={{ backgroundColor: this.state.bgColor }}>
                         {/*<h1>Recommendations<IconButton name="refresh" onClick={() => this.refreshRecommendations()} /></h1>*/}
                         <ScrollableContent
@@ -175,9 +183,19 @@ class Home extends React.Component {
                             {this.state.recommendedTracks &&
                                 <TracksPresentationScroll
                                     tracks={this.state.recommendedTracks}
-                                    onPlayTrack={(track) => { this.loadVideo(track) }} />}
+                                    onPlayTrack={(track, hasNext) => { this.loadVideo(track, hasNext) }} />}
 
                         </ScrollableContent>
+                    </Cell>
+
+                    <Cell col={12} hideDesktop hideTablet
+                        className="myContainer">
+                        <h1>Recommendations<IconButton name="refresh" onClick={() => this.refreshRecommendations()} /></h1>
+                        {this.state.recommendedTracks &&
+                            <TracksPresentation
+                                tracks={this.state.recommendedTracks}
+                                onPlayTrack={(track, hasNext) => { this.loadVideo(track, hasNext) }} />}
+
                     </Cell>
 
 
