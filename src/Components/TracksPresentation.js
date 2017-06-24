@@ -47,12 +47,12 @@ class TracksPresentationScroll extends React.Component {
                 <div
                     key={track.id + '-album-pres-cover'}
                     className="track-pres-item"
-                    style={{ width: this.props.width ? (this.props.width / 4) : '200px' }}>
+                    style={{ width: this.props.width ? (this.props.width / 4) : '200px' }}
+                    onClick={() => { this.props.onPlayTrack(track, hasNext) }}>
                     <img
                         src={track.album.images[0].url}
                         className="responsive-img"
-                        alt={track.id}
-                        onClick={() => { this.props.onPlayTrack(track, hasNext) }} />
+                        alt={track.id} />
 
                     <div className="track-pres-item-details">
                         <h2>{track.name}</h2>
