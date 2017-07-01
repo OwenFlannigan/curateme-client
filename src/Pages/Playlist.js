@@ -144,7 +144,7 @@ class Playlist extends React.Component {
     }
 
     loadVideo(track) {
-        const { audio } = this.props;
+        const { audio, audioPlaylist } = this.props;
         const { controller } = this.props.route;
 
         this.setState({ loading: true });
@@ -152,6 +152,15 @@ class Playlist extends React.Component {
 
         controller.videoSearch(query)
             .then((data) => {
+                audioPlaylist.clearPlaylist();
+
+                if (this.state.playlist.tracks.length > 1) {
+                    var currentTrackIndex = _.findIndex(this.state.playlist.tracks, (currentTrack) => {
+                        return currentTrack.id == track.id;
+                    });
+                    audioPlaylist.setPlaylist(this.state.playlist.tracks.slice(currentTrackIndex + 1, this.state.playlist.tracks.length));
+                }
+
                 audio.setData(data);
                 this.setState({ loading: false });
             });

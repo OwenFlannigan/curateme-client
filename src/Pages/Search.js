@@ -68,7 +68,7 @@ class Search extends Component {
     }
 
     loadVideo(track) {
-        const { audio } = this.props;
+        const { audio, audioPlaylist } = this.props;
         const { controller } = this.props.route;
 
         this.setState({ loading: true });
@@ -76,6 +76,7 @@ class Search extends Component {
 
         controller.videoSearch(query)
             .then((data) => {
+                audioPlaylist.clearPlaylist();
                 audio.setData(data);
                 this.setState({ loading: false });
             });

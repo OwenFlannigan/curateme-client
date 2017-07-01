@@ -9,10 +9,15 @@ export default class AudioPlaylist {
     }
 
     setPlaylist(data) {
-        this.videoPlaylist = {};
+        this.clearPlaylist();
         console.log('audio playlist data', data);
         this.spotifyData = data;
         this.loadAndSetVideoData();
+    }
+
+    clearPlaylist() {
+        this.spotifyData = {};
+        this.videoPlaylist = {};
     }
 
     loadAndSetVideoData() {
