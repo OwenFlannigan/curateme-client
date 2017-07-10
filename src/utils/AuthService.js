@@ -10,7 +10,7 @@ export default class AuthService extends EventEmitter {
 
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'http://localhost:3001/login',
+                redirectUrl: 'http://curateme.io/login',
                 responseType: 'token'
             },
             theme: {
