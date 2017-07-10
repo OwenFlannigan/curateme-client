@@ -23,13 +23,13 @@ export default class AudioPlaylist {
     loadAndSetVideoData() {
         if (this.spotifyData) {
             var videoQuery = this.spotifyData.map((track) => {
-                return track.name + ' ' + track.artists[0].name;
+                return track.name + ' ' + track.artists[0].name + '[:trackId]' + track.id;
             }).join(',');
 
             this.controller.videoPlaylistSearch(videoQuery)
                 .then((data) => {
 
-                    console.log(data);
+                    console.log('hurrr', data);
                     this.videoPlaylist = data;
                 });
         }

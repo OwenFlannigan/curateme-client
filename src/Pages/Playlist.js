@@ -161,6 +161,7 @@ class Playlist extends React.Component {
                     audioPlaylist.setPlaylist(this.state.playlist.tracks.slice(currentTrackIndex + 1, this.state.playlist.tracks.length));
                 }
 
+                data.trackId = track.id;
                 audio.setData(data);
                 this.setState({ loading: false });
             });

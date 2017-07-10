@@ -135,7 +135,7 @@ class Home extends React.Component {
                 });
                 audioPlaylist.setPlaylist(this.state.recommendedTracks.slice(currentTrackIndex + 1, this.state.recommendedTracks.length));
                 // }
-
+                data.trackId = track.id;
                 audio.setData(data);
                 this.setState({ loading: false });
             });

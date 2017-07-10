@@ -71,6 +71,7 @@ class AddPlaylist extends React.Component {
 
         controller.videoSearch(query)
             .then((data) => {
+                data.trackId = track.id;
                 audio.setData(data);
                 this.setState({ loading: false });
             });

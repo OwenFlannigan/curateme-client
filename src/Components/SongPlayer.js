@@ -74,7 +74,7 @@ class SongPlayer extends React.Component {
                     </Cell>
 
                     <Cell col={1} tablet={1} phone={1} className="information" style={{ textAlign: 'right' }}>
-                        <IconButton name="add" />
+                        <IconButton name="add" onClick={() => { this.props.onAdd() }} />
                         <IconButton name="share" />
                     </Cell>
                 </Grid>

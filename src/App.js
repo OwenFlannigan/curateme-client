@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { Layout, Navigation, Drawer, Header, Textfield, IconButton, Menu, MenuItem, Badge, Snackbar } from 'react-mdl';
 import { browserHistory, IndexLink, Link } from 'react-router';
 import SongPlayer from './Components/SongPlayer';
+import AddTrackDialog from './Components/AddTrackDialog';
 import { InboxDialog, AddFriendDialog } from './Components/Dialog';
 
 
@@ -27,6 +28,7 @@ class App extends Component {
 
 
     audioController.emitter.addListener('updated', (data) => {
+      console.log('app emit data', data);
       this.setState({ playerData: data, isPlayerActive: true });
     });
 
@@ -46,6 +48,18 @@ class App extends Component {
           return user.username;
         });
         this.setState({ users: users });
+      });
+
+    controller.getMyPlaylists()
+      .then((data) => {
+        console.log('playlists data', data);
+        var playlistData = Object.keys(data).map((key) => {
+          return {
+            name: data[key].name,
+            key: key
+          };
+        });
+        this.setState({ myPlaylists: playlistData });
       });
   }
 
@@ -75,7 +89,20 @@ class App extends Component {
     var data = audioPlaylist.getNextTrack();
     console.log('app data', data, this.props);
     audioController.setData(data);
-    
+  }
+
+  handleAddTrack(key) {
+    this.setState({ loading: true });
+    const { controller } = this.props.route;
+
+    controller.addTrackToPlaylist(key, [this.state.trackId])
+      .then((data) => {
+        if (data.message) {
+          this.setState({ loading: false, isDialogActive: false, isSnackbarActive: true, snackbarText: 'Track(s) has been added to playlist.' });
+        } else if (data.error) {
+          this.setState({ isSnackbarActive: true, snackbarText: 'Please select a playlist.', loading: false });
+        }
+      });
   }
 
   handleChange(event) {
@@ -126,9 +153,14 @@ class App extends Component {
           isAddFriendDialogActive: false,
           addFriendUsers: [],
           isSnackbarActive: true,
-          snackBarText: data.message
+          snackbarText: data.message
         });
       });
+  }
+
+  handleSongPlayerAdd() {
+    // console.log(this.state.playerData.trackId);
+    this.setState({ isDialogActive: true, trackId: this.state.playerData.trackId });
   }
 
   render() {
@@ -254,11 +286,18 @@ class App extends Component {
             {children}
           </div>
 
+          <AddTrackDialog
+            active={this.state.isDialogActive}
+            options={this.state.myPlaylists ? this.state.myPlaylists : []}
+            onClose={() => { this.setState({ isDialogActive: false }) }}
+            onAction={(key) => { this.handleAddTrack(key) }} />
+
           {this.state.playerData && <SongPlayer
             data={this.state.playerData}
             playlist={this.state.videoPlaylist}
             updateParent={(state) => { this.setState(state) }}
-            onEnd={() => { this.playNextTrack() }} />}
+            onEnd={() => { this.playNextTrack() }}
+            onAdd={() => { this.handleSongPlayerAdd() }} />}
 
 
         </Layout>
@@ -284,7 +323,7 @@ class App extends Component {
           active={this.state.isSnackbarActive}
           onClick={() => { this.setState({ isSnackbarActive: false }) }}
           onTimeout={() => { this.setState({ isSnackbarActive: false }) }}
-          action="Close">{this.state.snackBarText}</Snackbar>
+          action="Close">{this.state.snackbarText}</Snackbar>
 
       </div>
     );

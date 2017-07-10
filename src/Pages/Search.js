@@ -76,6 +76,7 @@ class Search extends Component {
 
         controller.videoSearch(query)
             .then((data) => {
+                data.trackId = track.id;
                 audioPlaylist.clearPlaylist();
                 audio.setData(data);
                 this.setState({ loading: false });

@@ -22,6 +22,7 @@ export default class AudioController extends EventEmitter {
         this.src = data.src;
         this.name = data.name;
         this.id = data.id;
+        this.trackId = data.trackId;
         this.emitter.emit('updated', data);
     }
 
