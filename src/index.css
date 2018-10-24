@@ -1,9 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 
+@font-face {
+	font-family: Avenir-Book;
+	src: url('./fonts/Avenir-Book.ttf') format('ttf');
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', 'sans-serif';
+  font-family: 'Roboto', sans-serif;
   font-weight: 300;
   box-sizing: border-box;
 }
@@ -85,7 +90,7 @@ select option {
 }
 
 header {
-  font-family: 'Avenir Next', 'Futura', 'sans-serif';
+  font-family: 'Avenir Next', Avenir-Book, 'Futura', sans-serif;
   background: #f4f4f4 !important;
 }
 
@@ -253,6 +258,53 @@ span.artist-pres-name {
   color: white;
   font-size: 1.5rem;
   font-weight: 300;
+}
+
+
+/* artist page */
+.artist-grid > div {
+    transition: width 150ms
+}
+
+.artist-grid h1 {
+    padding-left: 0;
+}
+
+.artist-grid p {
+    color: #2d2d2d;
+    font-weight: lighter;
+}
+
+.related-artist-card {
+    transition: transform 100ms;
+}
+
+.related-artist-card:hover {
+    transform: scale(1.1);
+}
+
+a.related-artist-card-link:hover, .related-artist-card-link img:hover {
+    transform: none;
+}
+
+a.related-artist-card-link {
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.related-artist-card-link img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.artist-description img {
+    display: none;
 }
 
 /* nav links */
@@ -476,7 +528,7 @@ input.form-control, .ReactTags__tagInputField, .add-playlist-form input {
 
 button {
   font-size: 1rem;
-  font-family: 'Avenir Next', 'Futura', 'sans-serif';
+  font-family: 'Avenir Next', Avenir-Book, 'Futura', sans-serif;
   background: #f4f4f4;
   border: none;
   padding: 1rem;
@@ -661,7 +713,7 @@ ul.message-list {
 
 .nav-search-field input {
   color: #2d2d2d;
-  font-family: 'Avenir Next', 'Futura', 'sans-serif';
+  font-family: 'Avenir Next', Avenir-Book, 'Futura', sans-serif;
 }
 
 .share-dialog-container {

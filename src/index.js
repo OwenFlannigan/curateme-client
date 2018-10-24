@@ -19,6 +19,7 @@ import Login from './Pages/Login';
 import Home from './Pages/Home';
 import Playlists from './Pages/Playlists';
 import Playlist from './Pages/Playlist';
+import Artist from './Pages/Artist';
 import AddPlaylist from './Pages/AddPlaylist';
 import Events from './Pages/Events';
 import Search from './Pages/Search';
@@ -52,9 +53,14 @@ const audio = new AudioController('');
 const playlist = new AudioPlaylist('', controller);
 
 const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
+  if (!auth.isAuthenticated()) {
     replace({ pathname: 'login' });
   }
+
+  // console.log('hash', nextState.location.hash);
+  // if (/access_token|id_token|error/.test(nextState.location.hash)) {
+  //   auth.handleAuthentication();
+  // }
 }
 
 ReactDOM.render(
@@ -75,8 +81,8 @@ ReactDOM.render(
       </Route>
 
       <Route path="artists">
-        <IndexRoute component={ComingSoon} />
-        <Route path="/artists/:artist_key" component={ComingSoon} />
+        <IndexRoute component={NotFound} />
+        <Route path="/artists/:artist_key" component={Artist} controller={controller} />
       </Route>
 
       <Route path="events" component={Events} controller={controller} />

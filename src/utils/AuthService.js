@@ -1,41 +1,68 @@
+import auth0 from 'auth0-js';
 import Auth0Lock from 'auth0-lock';
 import { EventEmitter } from 'events';
 import { isTokenExpired } from './jwtHelper';
 import { browserHistory } from 'react-router';
 import _ from 'lodash';
 
-export default class AuthService extends EventEmitter {
-    constructor(clientId, domain) {
+export default class Auth extends EventEmitter {
+    auth0 = new auth0.WebAuth({
+        domain: 'owenflannigan.auth0.com',
+        clientID: 'ZM0A6Syn4uYCI0euTMWrphGaw2Qe8H7l',
+        redirectUri: 'http://localhost:3001/login',
+        responseType: 'token id_token'
+    });
+
+    constructor() {
         super();
-
-        this.lock = new Auth0Lock(clientId, domain, {
-            auth: {
-                redirectUrl: 'http://localhost:3001/login',
-                responseType: 'token'
-            },
-            theme: {
-                logo: require('../../public/favicon.ico'),
-                primaryColor: '#ff6363'
-            },
-            languageDictionary: {
-                title: 'curate.me',
-                signUpTerms: 'I am at least 13 years of age.'
-            },
-            usernameStyle: 'username',
-            mustAcceptTerms: true
-        });
-
-        // callback for lock authenticated event
-        this.lock.on('authenticated', this._doAuthentication.bind(this));
-
-        // binds ligin function to keep context
         this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+        this.handleAuthentication = this.handleAuthentication.bind(this);
+        this.isAuthenticated = this.isAuthenticated.bind(this);
     }
+
+    handleAuthentication() {
+        this.auth0.parseHash((err, authResult) => {
+            if(authResult && authResult.accessToken && authResult.idToken) {
+                this.setSession(authResult);
+                browserHistory.replace('/home');
+            } else if (err) {
+                browserHistory.replace('/login');
+                console.log(err)
+            }
+        });
+    }
+
+    setSession(authResult) {
+        let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+        localStorage.setItem('access_token', authResult.accessToken);
+        localStorage.setItem('id_token', authResult.idToken);
+        localStorage.setItem('expires_at', expiresAt);
+        browserHistory.replace('/home');
+    }
+
+    login() {
+        this.auth0.authorize();
+    }
+
+    logout() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('expires_at');
+        
+        browserHistory.replace('/login');
+    }
+
+    isAuthenticated() {
+        let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+        return new Date().getTime() < expiresAt;
+    }
+
 
     _doAuthentication(authResult) {
         // save user token
         this.setToken(authResult.idToken);
-        browserHistory.replace('/');
+        browserHistory.replace('/home');
 
         this.lock.getProfile(authResult.idToken, (error, profile) => {
             if (error) {
@@ -46,15 +73,17 @@ export default class AuthService extends EventEmitter {
         });
     }
 
-    login() {
-        // display login widget
-        this.lock.show();
-    }
+    // login() {
+    //     // display login widget
+    //     this.lock.show();
+    // }
 
     loggedIn() {
         // check for valid saved token
-        const token = this.getToken();
-        return !!token && !isTokenExpired(token);
+        // const token = this.getToken();
+        // return !!token && !isTokenExpired(token);
+
+        return this.isAuthenticated();
     }
 
     setToken(idToken) {
@@ -103,14 +132,14 @@ export default class AuthService extends EventEmitter {
         }
     }
 
-    logout() {
-        // clear user token and profile data
-        localStorage.removeItem('id_token');
-        localStorage.removeItem('profile');
-        localStorage.removeItem('spotify_access_token');
-        localStorage.removeItem('spotify_refresh_token');
-        browserHistory.replace('/login');
-    }
+    // logout() {
+    //     // clear user token and profile data
+    //     localStorage.removeItem('id_token');
+    //     localStorage.removeItem('profile');
+    //     localStorage.removeItem('spotify_access_token');
+    //     localStorage.removeItem('spotify_refresh_token');
+    //     browserHistory.replace('/login');
+    // }
 
     _checkStatus(response) {
         if (response.status >= 200 && response.status < 300) {
@@ -131,10 +160,10 @@ export default class AuthService extends EventEmitter {
         }
 
         // if logged in, includes the authorization headers
-        if (this.loggedIn()) {
+        if (this.isAuthenticated()) {
             headers['Authorization'] = 'Bearer ' + this.getToken();
         }
-        console.log(this.getToken());
+        // console.log(this.getToken());
 
         return fetch(url, {
             headers,

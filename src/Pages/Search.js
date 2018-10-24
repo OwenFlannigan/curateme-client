@@ -217,3 +217,4 @@ class ArtistPresentation extends React.Component {
 }
 
 export default Search;
+export { ArtistPresentation };

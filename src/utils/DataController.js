@@ -3,6 +3,9 @@ import _ from 'lodash';
 
 import firebase from 'firebase';
 
+var baseGeniusUrl = "https://api.genius.com";
+var geniusAccessToken = "QbenyHdziiziuwmuS-DSQ1bG8EaYNJ4y-BiqEjdwDe3KW0IL699V5RVy50MsrR6G";
+
 export default class DataController {
     constructor(auth) {
         this.auth = auth;
@@ -276,6 +279,35 @@ export default class DataController {
             });
     }
 
+    artist(id) {
+        return fetch('/api/artist?id=' + id)
+            .then((response) => {
+                return response.json();
+            });
+    }
+
+    artistDetails(name) {
+        var resource = '/search?q=' + name;
+        var uri = baseGeniusUrl + resource + '&access_token=' + geniusAccessToken;
+
+        return fetch(uri)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if(data.response.hits[0]) {
+                    var artistPath = data.response.hits[0].result.primary_artist.api_path;
+                    
+                    return fetch(baseGeniusUrl + artistPath + '?access_token=' + geniusAccessToken + '&text_format=html,plain')
+                    .then((response) => {
+                        return response.json();
+                    });
+                }
+
+                return null;
+            });
+    }
+
     // youtube
     videoSearch(query) {
         return fetch('/api/youtube/search?q=' + query)
@@ -328,5 +360,7 @@ class SpotifyController {
             });
     }
 }
+
+
 
 export { SpotifyController };
